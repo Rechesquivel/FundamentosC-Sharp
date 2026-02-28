@@ -1,0 +1,15 @@
+R:\Repositorios\Semana2\parte1\Parte1\Parte1\bin\Debug\net10.0\Parte1.exe
+R:\Repositorios\Semana2\parte1\Parte1\Parte1\bin\Debug\net10.0\Parte1.deps.json
+R:\Repositorios\Semana2\parte1\Parte1\Parte1\bin\Debug\net10.0\Parte1.runtimeconfig.json
+R:\Repositorios\Semana2\parte1\Parte1\Parte1\bin\Debug\net10.0\Parte1.dll
+R:\Repositorios\Semana2\parte1\Parte1\Parte1\bin\Debug\net10.0\Parte1.pdb
+R:\Repositorios\Semana2\parte1\Parte1\Parte1\obj\Debug\net10.0\Parte1.GeneratedMSBuildEditorConfig.editorconfig
+R:\Repositorios\Semana2\parte1\Parte1\Parte1\obj\Debug\net10.0\Parte1.AssemblyInfoInputs.cache
+R:\Repositorios\Semana2\parte1\Parte1\Parte1\obj\Debug\net10.0\Parte1.AssemblyInfo.cs
+R:\Repositorios\Semana2\parte1\Parte1\Parte1\obj\Debug\net10.0\Parte1.csproj.CoreCompileInputs.cache
+R:\Repositorios\Semana2\parte1\Parte1\Parte1\obj\Debug\net10.0\Parte1.sourcelink.json
+R:\Repositorios\Semana2\parte1\Parte1\Parte1\obj\Debug\net10.0\Parte1.dll
+R:\Repositorios\Semana2\parte1\Parte1\Parte1\obj\Debug\net10.0\refint\Parte1.dll
+R:\Repositorios\Semana2\parte1\Parte1\Parte1\obj\Debug\net10.0\Parte1.pdb
+R:\Repositorios\Semana2\parte1\Parte1\Parte1\obj\Debug\net10.0\Parte1.genruntimeconfig.cache
+R:\Repositorios\Semana2\parte1\Parte1\Parte1\obj\Debug\net10.0\ref\Parte1.dll
