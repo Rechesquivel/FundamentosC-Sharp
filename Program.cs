@@ -1,127 +1,100 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 
-namespace Parte1 // Note: actual namespace depends on the project name.
+namespace Parte2_Seguridad // Note: actual namespace depends on the project name.
 {
-    internal class Program
+    public class Parte2_Seguridad
     {
         static void Main(string[] args)
         {
-            //Parte 1 Bucles
-            //FOR
-            for (int i = 1; i <= 50; i++)
-            {
-                if (i == 25)
-                {
-                    Console.WriteLine("Se alcanzó el 25. Fin del bucle.");
-                    break;
-                }
-                if (i % 5 == 0)
-                {
-                    continue; // Salta múltiplos de 5
-                }
+            // Validación de datos
+            Console.WriteLine("Validacion de datos:");
 
-                Console.WriteLine(i);
+            Console.WriteLine("Ingrese su edad: ");
+            string edadInput = Console.ReadLine();
+            int edad;
+
+            if (int.TryParse(edadInput, out edad))
+            {
+                Console.WriteLine("Edad válida: " + edad);
+            }
+            else
+            {
+                Console.WriteLine("Edad inválida.");
             }
 
-            // Ciclo FOREACH 
-            //Lista de nombres
-            List<string> estudiantes = new List<string>() { "Juan", "Luis", "María", "Ana", "Pedro", "Raquel" };
-            foreach (string nombre in estudiantes)
+            Console.WriteLine("Ingrese su correo electronico: ");
+            string correo = Console.ReadLine();
+
+            string patronCorreo = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            bool esCorreoValido = Regex.IsMatch(correo, patronCorreo);
+
+            if (esCorreoValido)
             {
-                if (nombre == "Ana")
-                {
-                    continue; // No saludar a Ana
-
-                }
-
-                Console.WriteLine("Hola " + nombre);
+                Console.WriteLine("Correo válido");
+            }
+            else
+            {
+                Console.WriteLine("Correo inválido");
             }
 
+            //Hashing + salting
+            Console.WriteLine("hashing con sha-256");
+            Console.WriteLine("Ingrese una contraseña: ");
+            string password = Console.ReadLine();
 
-            //Ciclo Do WHILE
-            while (true)
+            //Generar salting aleatorio
+            byte[] salt = new byte[16];
+            using (var rng = RandomNumberGenerator.Create())
             {
-                Console.WriteLine("Ingresa un número positivo (0 para salir): ");
-                string input = Console.ReadLine();
-                int numero;
-
-                // Validate parse
-                if (!int.TryParse(input, out numero))
-                {
-                    Console.WriteLine("Entrada invalida");
-                    continue;
-                }
-
-                if (numero == 0)
-                {
-                    Console.WriteLine("Fin del programa");
-                    break;
-                }
-
-                if (numero > 100)
-                {
-                    Console.WriteLine("Número mayor a 100. Se detiene el ciclo.");
-                    break;
-                }
-                if (numero > 0)
-                {
-                    Console.WriteLine("Número válido: " + numero);
-                }
-                else
-                {
-                    Console.WriteLine("Solo números positivos.");
-                    continue;
-                }
-
-                // Do WHILE + Switch
-                int opcion;
-
-                do
-                {
-                    Console.WriteLine("Menú:");
-                    Console.WriteLine("1. Mostrar números pares");
-                    Console.WriteLine("2. Mostrar números impares");
-                    Console.WriteLine("3. Salir");
-                    Console.Write("Selecciona una opción: ");
-
-                    if (!int.TryParse(Console.ReadLine(), out opcion))
-                    {
-                        Console.WriteLine("Opción inválida.");
-                        continue;
-                    }
-
-                    switch (opcion)
-                    {
-                        case 1:
-                            Console.WriteLine("Números pares del 1 al 20:");
-                            for (int i = 1; i <= 20; i++)
-                            {
-                                if (i % 2 == 0)
-                                Console.WriteLine(i + " ");
-                            }
-                            break;
-
-                        case 2:
-                            Console.WriteLine("Números impares del 1 al 20:");
-                            for (int i = 1; i <= 20; i++)
-                            {
-                                Console.WriteLine(i + " ");
-                            }
-                            break;
-
-                        case 3:
-                            Console.WriteLine("Saliendo del menú...");
-                            break;
-
-                        default:
-                            Console.WriteLine("Opción no válida.");
-                            break;
-                    }
-
-                } while (opcion != 3);
-
+                rng.GetBytes(salt);
             }
+            string saltString = Convert.ToBase64String(salt);
+
+            //Combinar contraseña + salt
+            string passwordConSalt = password + saltString;
+
+            // Crear hash con SHA-256
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(passwordConSalt);
+                byte[] hash = sha256.ComputeHash(bytes);
+
+                string hashString = Convert.ToBase64String(hash);
+
+                Console.WriteLine("Contraseña original: " + password);
+                Console.WriteLine("Salt generado: " + saltString);
+                Console.WriteLine("Hash SHA-256: " + hashString);
+            }
+
+            //Prevención de ataques de inyección SQL (Simulado)
+            Console.WriteLine("Prevención de ataques de inyección SQL (Simulado)");
+
+            string usuario = "admin";
+            string pass = "1234";
+
+            // Forma insegura  (vulnerable a inyección SQL)
+            string consultaInsegura = "SELECT * FROM usuarios WHERE usuario = '" + usuario + "' AND pass = '" + pass + "'";
+            Console.WriteLine("Consulta insegura:");
+            Console.WriteLine(consultaInsegura);
+
+            // Forma segura (usando parámetros)
+            string consultaSegura = "SELECT * FROM usuarios WHERE usuario = @usuario AND pass = @pass";
+            Console.WriteLine("Consulta segura:");
+            Console.WriteLine(consultaSegura);
+
+            /* ¿Por qué es importante la validación de datos?
+             * La validación de datos es crucial para garantizar que la información ingresada por los usuarios sea correcta, segura y esté en el formato esperado. Esto ayuda a prevenir errores, ataques de inyección, y asegura que el sistema funcione de manera confiable.
+             * 
+             * ¿Qué es el hashing y el salting?
+             * El hashing es un proceso que convierte una entrada (como una contraseña) en una cadena de longitud fija, que parece aleatoria. El salting es la adición de un valor aleatorio (salt) a la contraseña antes de hashearla, lo que hace que cada hash sea único incluso si dos usuarios tienen la misma contraseña.
+             * 
+             * ¿Cómo se pueden prevenir los ataques de inyección SQL?
+             * Para prevenir los ataques de inyección SQL, se deben usar consultas parametrizadas o procedimientos almacenados en lugar de concatenar directamente las entradas del usuario en las consultas SQL. Esto asegura que las entradas del usuario sean tratadas como datos y no como parte del código SQL.
+             */
         }
     }
 }
+
